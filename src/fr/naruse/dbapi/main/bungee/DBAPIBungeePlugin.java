@@ -27,6 +27,7 @@ public class DBAPIBungeePlugin extends Plugin implements IDBAPIPlugin, Listener 
     public void onLoad() {
         super.onLoad();
         this.bungeeConfig = new BungeeConfigFile(this, "config.yml");
+        this.bungeeConfig.saveDefaultConfig();
         CORE.setAvailableConnections(bungeeConfig.getConfig().getInt("availableConnections"));
         CORE.setRequestSeparator(bungeeConfig.getConfig().getInt("requestSeparator"));
         CORE.onLoad(this);
@@ -70,6 +71,11 @@ public class DBAPIBungeePlugin extends Plugin implements IDBAPIPlugin, Listener 
     @Override
     public String getServerName() {
         return "Waterfall";
+    }
+
+    @Override
+    public String getVersion() {
+        return getDescription().getVersion();
     }
 
     private void addSecurityManager() {

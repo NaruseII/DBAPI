@@ -1,86 +1,96 @@
 package fr.naruse.dbapi.main.bungee.config;
 
-import fr.naruse.dbapi.main.bungee.DBAPIBungeePlugin;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
 
-public class BungeeConfigFile {
+public class BungeeConfigFile
+{
+    private Plugin plugin;
+    private File file;
+    private Configuration fileConfiguration;
 
-    private final DBAPIBungeePlugin pl;
-    private final File file;
-    private final FileConfiguration configuration;
+    public BungeeConfigFile(Plugin plugin, File file)
+    {
+        this.plugin = plugin;
+        this.file = file;
+        setup();
+    }
 
-    public BungeeConfigFile(DBAPIBungeePlugin pl, String fileName) {
-        this.pl = pl;
-        this.file = new File(pl.getDataFolder(), fileName);
-        this.configuration = new YamlConfiguration();
+    public BungeeConfigFile(Plugin plugin, String name)
+    {
+        this.plugin = plugin;
+        this.file = new File(plugin.getDataFolder(), name);
+        setup();
+    }
 
-        try{
-            if(!file.exists()){
-                file.createNewFile();
-                saveResource(fileName, file);
+    public String getName()
+    {
+        return file.getName();
+    }
+
+    private void setup()
+    {
+        try
+        {
+            if(!this.file.getParentFile().exists())
+                this.file.getParentFile().mkdirs();
+
+            if(!this.file.exists())
+                this.file.createNewFile();
+
+            this.fileConfiguration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
+        }
+        catch (IOException localIOException)
+        {
+            localIOException.printStackTrace();
+        }
+    }
+
+    public void reload()
+    {
+        setup();
+    }
+
+    public Configuration getConfig()
+    {
+        if (this.fileConfiguration == null) {
+            reload();
+        }
+        return this.fileConfiguration;
+    }
+
+    public void save()
+    {
+        try
+        {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.fileConfiguration, file);
+        }
+        catch (IOException localIOException)
+        {
+            localIOException.printStackTrace();
+        }
+    }
+
+    public void saveDefaultConfig()
+    {
+        if (!file.exists() || file.length() == 0) {
+            file.delete();
+            try
+            {
+                Files.copy(this.plugin.getResourceAsStream(file.getName()), file.toPath(), new CopyOption[0]);
             }
-
-            configuration.load(file);
-
-            Reader reader = new InputStreamReader(getResource("resources/messages.yml"), "UTF8");
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(reader);
-            configuration.setDefaults(defConfig);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        saveConfig();
-    }
-
-    private InputStream getResource(String filename) {
-        if (filename == null) {
-            throw new IllegalArgumentException("Filename cannot be null");
-        } else {
-            try {
-                URL url = pl.getClass().getClassLoader().getResource(filename);
-                if (url == null) {
-                    return null;
-                } else {
-                    URLConnection connection = url.openConnection();
-                    connection.setUseCaches(false);
-                    return connection.getInputStream();
-                }
-            } catch (IOException var4) {
-                return null;
+            catch (IOException localIOException)
+            {
+                localIOException.printStackTrace();
             }
         }
     }
 
-    private void saveResource(String path, File messageFile) {
-        try{
-            InputStream inputStream = getResource(path);
-            byte[] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer);
-
-            OutputStream outStream = new FileOutputStream(messageFile);
-            outStream.write(buffer);
-
-            inputStream.close();
-            outStream.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void saveConfig() {
-        try{
-            configuration.save(file);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public FileConfiguration getConfig() {
-        return configuration;
-    }
 }

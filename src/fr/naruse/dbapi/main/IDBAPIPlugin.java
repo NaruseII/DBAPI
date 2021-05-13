@@ -19,4 +19,6 @@ public interface IDBAPIPlugin {
     SQLRequest callEvent(Database database, boolean isInSecondThread, SQLRequestEvent.RequestType type, SQLRequest sqlRequest);
 
     String getServerName();
+
+    String getVersion();
 }

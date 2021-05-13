@@ -76,6 +76,11 @@ public class DBAPIBukkitPlugin extends JavaPlugin implements IDBAPIPlugin {
         return Bukkit.getServerName();
     }
 
+    @Override
+    public String getVersion() {
+        return getDescription().getVersion();
+    }
+
     private void addSecurityManager() {
         boolean preventRequests = getConfig().getBoolean("security.preventRequests");
         boolean forceKick = getConfig().getBoolean("security.forceKick");

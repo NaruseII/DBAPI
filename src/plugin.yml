@@ -1,6 +1,6 @@
 name: DBAPI
 authors: [Naruse, jeremaier]
-version: 1.1.4
+version: 1.1.5
 main: fr.naruse.dbapi.main.bukkit.DBAPIBukkitPlugin
 commands:
   dbapi:

@@ -1,9 +1,7 @@
 package fr.naruse.dbapi.sql;
 
-import com.google.common.collect.Maps;
 import fr.naruse.dbapi.database.Database;
 
-import java.util.Map;
 import java.util.concurrent.*;
 
 public class SQLThread {

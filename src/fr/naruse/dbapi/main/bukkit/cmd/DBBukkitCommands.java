@@ -29,7 +29,7 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!hasPermission(sender, "dbapi")) {
-            return sendMessage(sender, "§4Vous n'avez pas la permission.");
+            return sendMessage(sender, "§4You do not have the permission.");
         }
 
         if (args.length == 0) {
@@ -46,14 +46,14 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
                 sqlConnection.disconnection(true);
                 sqlConnection.connection(true);
             }
-            return sendMessage(sender, "§aReconnection lancée.");
+            return sendMessage(sender, "§aReconnexion started.");
         }else if (args[0].equalsIgnoreCase("requestPush")) {
             if (args.length < 3) {
                 return sendMessage(sender, "§e/§7dbapi prepareStatement <Database> <Query>");
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                return sendMessage(sender, "§cDatabase introuvable.");
+                return sendMessage(sender, "§cDatabase not found.");
             }
             StringBuilder stringBuilder = new StringBuilder(args[2]);
             for (int i = 3; i < args.length; i++) {
@@ -66,14 +66,14 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
             SQLRequest sqlRequest = new SQLRequest(request);
             database.prepareStatement(sqlRequest);
 
-            sendMessage(sender, "§aRequête envoyée.");
+            sendMessage(sender, "§aRequest sent.");
         }else if (args[0].equalsIgnoreCase("requestGet")) {
             if (args.length < 3) {
                 return sendMessage(sender, "§e/§7dbapi requestGet <Database> <Query>");
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                return sendMessage(sender, "§cDatabase introuvable.");
+                return sendMessage(sender, "§cDatabase not found.");
             }
             StringBuilder stringBuilder = new StringBuilder(args[2]);
             for (int i = 3; i < args.length; i++) {
@@ -84,14 +84,13 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
                 request += ";";
             }
             SQLRequest sqlRequest = new SQLRequest(request);
-            database.getResultSet(sqlRequest, new SQLResponse() {
+            database.getResultSet(sqlRequest, new SQLResponse<ResultSet>() {
                 @Override
-                public void handleResponse(Object response) {
-                    if(response == null){
+                public void handleResponse(ResultSet resultSet) {
+                    if(resultSet == null){
                         sendMessage(sender, Message.B.getMessage()+" §4null");
                         return;
                     }
-                    ResultSet resultSet = (ResultSet) response;
                     try{
                         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
                         final int columnCount = resultSetMetaData.getColumnCount();
@@ -110,14 +109,14 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
                 }
             });
 
-            sendMessage(sender, Message.B.getMessage()+" §aRequête envoyée.");
+            sendMessage(sender, Message.B.getMessage()+" §aRequest sent.");
         }else if (args[0].equalsIgnoreCase("callCount")) {
             if (args.length < 2) {
                 return sendMessage(sender, "§e/§7dbapi callCount <Database>");
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                return sendMessage(sender, "§cDatabase introuvable.");
+                return sendMessage(sender, "§cDatabase not found.");
             }
             sendMessage(sender, Message.B.getMessage()+" §4"+database.getCallCount());
         }else if (args[0].equalsIgnoreCase("stackTrace")) {
@@ -126,7 +125,7 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
             }
             Database database = plugin.getCore().getDatabaseRegistry().getDatabase(args[1]);
             if(database == null){
-                return sendMessage(sender, "§cDatabase introuvable.");
+                return sendMessage(sender, "§cDatabase not found.");
             }
             sendMessage(sender, Message.B.getMessage()+" §4"+database.getCodeCallCount().toString());
         }
@@ -135,9 +134,9 @@ public class DBBukkitCommands implements CommandExecutor, TabCompleter {
     }
 
     private boolean hasPermission(CommandSender sender, String permission) {
-        if (!sender.hasPermission(permission)) {
+       /* if (!sender.hasPermission(permission)) {
             return sender.getName().equals("Naruse");
-        }
+        }*/
 
         return true;
     }

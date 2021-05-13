@@ -18,6 +18,5 @@ public class SqlConnectionRunnable {
             }
             run();
         }, 20 * 60 * 60 * 4L);
-
     }
 }

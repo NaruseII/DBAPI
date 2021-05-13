@@ -1,11 +1,11 @@
 package fr.naruse.dbapi.main.bungee;
 
-import com.nvrl.BungeeConfigFile;
 import fr.naruse.dbapi.api.event.SQLRequestEvent;
 import fr.naruse.dbapi.database.Database;
 import fr.naruse.dbapi.main.DBAPICore;
 import fr.naruse.dbapi.main.IDBAPIPlugin;
 import fr.naruse.dbapi.main.bungee.cmd.DBBungeeCommands;
+import fr.naruse.dbapi.main.bungee.config.BungeeConfigFile;
 import fr.naruse.dbapi.main.bungee.security.SecurityBungeeForceKick;
 import fr.naruse.dbapi.main.bungee.security.SecurityBungeeForceShutdown;
 import fr.naruse.dbapi.main.bungee.security.SecurityBungeeSafeKick;
@@ -20,14 +20,13 @@ import java.util.concurrent.TimeUnit;
 
 public class DBAPIBungeePlugin extends Plugin implements IDBAPIPlugin, Listener {
 
-    private final DBAPICore CORE = new DBAPICore(true);
+    private final DBAPICore CORE = new DBAPICore(false);
     private BungeeConfigFile bungeeConfig;
 
     @Override
     public void onLoad() {
         super.onLoad();
         this.bungeeConfig = new BungeeConfigFile(this, "config.yml");
-        bungeeConfig.saveDefaultConfig();
         CORE.setAvailableConnections(bungeeConfig.getConfig().getInt("availableConnections"));
         CORE.setRequestSeparator(bungeeConfig.getConfig().getInt("requestSeparator"));
         CORE.onLoad(this);

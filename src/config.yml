@@ -1,0 +1,25 @@
+# DB details
+host: "localhost"
+database: "database"
+user: "root"
+pass: ""
+
+# Other [Connections number]
+availableConnections: 1
+
+# Connection properties [Unused]
+pool:
+  requestSeparator: 50 # In ms
+
+# [Plugin logs]
+logs:
+  enable: false
+  tableName: "dbapi_logs"
+
+# [What to do when an error happened]
+security:
+  preventRequests: false # Cancel next SQL requests
+  forceKick: false # Kick players & cancel joins
+  safeKick: false # Prevent SQL requests then kick players & cancel joins
+  forceShutdown: false # Stop the server
+  safeShutdown: false # Prevent SQL requests then stop the server

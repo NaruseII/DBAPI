@@ -34,7 +34,7 @@ public class SecurityBungeeSafeKick extends AbstractSecurity implements Listener
     public void onLogin(LoginEvent e) {
         if (isActive) {
             e.setCancelled(true);
-            e.setCancelReason("Serveur en maintenance.");
+            e.setCancelReason("Server closed. Cause: DBAPI");
         }
     }
 }

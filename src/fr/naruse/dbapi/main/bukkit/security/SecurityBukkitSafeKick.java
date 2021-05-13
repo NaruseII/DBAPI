@@ -33,7 +33,7 @@ public class SecurityBukkitSafeKick extends AbstractSecurity implements Listener
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
         if (isActive) {
-            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Serveur en maintenance.");
+            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Server closed. Cause: DBAPI");
         }
     }
 }

@@ -67,7 +67,7 @@ public class DBAPIBukkitPlugin extends JavaPlugin implements IDBAPIPlugin {
     @Override
     public SQLRequest callEvent(Database database, boolean isInSecondThread, SQLRequestEvent.RequestType type, SQLRequest sqlRequest) {
         SQLRequestEvent sqlRequestEvent = new SQLRequestEvent(isInSecondThread, type, database, sqlRequest);
-        Bukkit.getPluginManager().callEvent(sqlRequestEvent);
+        //Bukkit.getPluginManager().callEvent(sqlRequestEvent);
         return sqlRequestEvent.getSqlRequest();
     }
 

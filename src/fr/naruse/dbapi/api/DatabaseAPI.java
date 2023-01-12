@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class DatabaseAPI {
+
     private static DBAPICore core;
 
     public static void setDBAPICore(DBAPICore dbapiCore) {

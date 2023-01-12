@@ -1,6 +1,6 @@
 name: DBAPI
 author: Naruse
-version: 1.2.5
+version: 1.2.6
 main: fr.naruse.dbapi.main.bungee.DBAPIBungeePlugin
 commands:
   bdbapi:
